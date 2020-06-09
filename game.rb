@@ -140,19 +140,23 @@ class AI
   end
 
   def play_at_first_empty_cell(board)
-    cell_number = 1
-    while board[cell_number] != EMPTY_CELL
-      cell_number += 1 
+    if board[5] == EMPTY_CELL
+      5
+    else
+      cell_number = 1
+      while board[cell_number] != EMPTY_CELL
+        cell_number += 1 
+      end
+      cell_number
     end
-    cell_number
   end
 
-  def find_best_move(board )
+  def find_best_move(board)
     moves = []
     1.upto(9).each do |cell_number| 
       if board[cell_number] == EMPTY_CELL 
-        move = Move.new(self, board.clone, cell_number, @symbol)
-        move.compute_grade
+        move = Move.new(self, board, cell_number, @symbol)
+        move.compute_score
         moves << move
       end
     end
@@ -168,34 +172,34 @@ class Move
     @board = board
     @symbol = symbol
     @cell_number = cell_number
-    @grade = 0
+    @score = 0
   end
 
   def <=>(other)
-    other.grade <=> self.grade
+    other.score <=> self.score
   end
 
   def cell_number
     @cell_number
   end
 
-  def grade
-    @grade
+  def score
+    @score
   end
 
-  def compute_grade
-    early_end_multiplier = @board.count_empty_cells
+  def compute_score
+    empty_before_playing = @board.count_empty_cells 
     @board = @board.play_at(@symbol, @cell_number)
     while not @board.is_game_finished?
       @board = @player_simulation.play(@board)
       @board = @ai.play(@board)
     end
-    if @board.is_winner? @symbol
-      @grade = 1 * early_end_multiplier
-    elsif @board.is_winner? @symbol.opposite
-      @grade = -1 * early_end_multiplier
+    if @board.is_winner?(@symbol)
+      @score = 2 
+    elsif @board.is_winner?(@symbol.opposite)
+      @score = -1
     else
-      @grade = 0
+      @score = 1
     end
   end
 end
