@@ -205,7 +205,7 @@ class Game
     ai = AI.new(AI_SYMBOL)
     board = Board.new
     board.clear
-    puts "Do you want to start? Y/N"
+    puts "Do you want to play first? Y/N"
     if gets.upcase.start_with?("Y")
       puts "Player plays first"
     else
