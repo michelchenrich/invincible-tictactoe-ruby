@@ -31,16 +31,12 @@ class Board
     1.upto(9).each { |cell_number| self[cell_number] = EMPTY_CELL }
   end
 
-  def clone
-    Board.new(@cells.clone)
-  end
-
   def to_s
     "| #{self[1]} | #{self[2]} | #{self[3]} |\n" + 
-      "-------------\n"+
-      "| #{self[4]} | #{self[5]} | #{self[6]} |\n" + 
-      "-------------\n"+
-      "| #{self[7]} | #{self[8]} | #{self[9]} |\n" 
+    "-------------\n"+
+    "| #{self[4]} | #{self[5]} | #{self[6]} |\n" + 
+    "-------------\n"+
+    "| #{self[7]} | #{self[8]} | #{self[9]} |\n" 
   end
 
   def is_game_finished?
@@ -48,31 +44,27 @@ class Board
   end
 
   def is_winner? symbol
-    has_three_of_same_in_row?(symbol,1) ||
-      has_three_of_same_in_row?(symbol,2) ||
-      has_three_of_same_in_row?(symbol,3) ||
-      has_three_of_same_in_column?(symbol,1) ||
-      has_three_of_same_in_column?(symbol,2) ||
-      has_three_of_same_in_column?(symbol,3) ||
-      has_three_of_same_in_first_diagonal?(symbol) ||
-      has_three_of_same_in_second_diagonal?(symbol)
+    has_three_of_same_in_row?(symbol, 1) ||
+    has_three_of_same_in_row?(symbol, 2) ||
+    has_three_of_same_in_row?(symbol, 3) ||
+    has_three_of_same_in_column?(symbol, 1) ||
+    has_three_of_same_in_column?(symbol, 2) ||
+    has_three_of_same_in_column?(symbol, 3) ||
+    has_three_of_same_in_first_diagonal?(symbol) ||
+    has_three_of_same_in_second_diagonal?(symbol)
   end
 
   def count_empty_cells
-    count(EMPTY_CELL)
-  end
-
-  def count(symbol)
     count = 0
     1.upto(9).each do |cell_number|
-      if self[cell_number] == symbol
+      if self[cell_number] == EMPTY_CELL
         count += 1
       end
     end
     count
   end
 
-  def has_three_of_same_in_row?(symbol,row_number) 
+  def has_three_of_same_in_row?(symbol, row_number) 
     max_cell_number = row_number * 3
     string = ""
     (max_cell_number-2).upto(max_cell_number) do |cell_number|
@@ -81,7 +73,7 @@ class Board
     string == symbol.to_s * 3
   end
 
-  def has_three_of_same_in_column?(symbol,column_number) 
+  def has_three_of_same_in_column?(symbol, column_number) 
     string = ""
     (column_number..(column_number+6)).step(3) do |cell_number|
       string += self[cell_number].to_s
@@ -114,7 +106,7 @@ class Board
   end
 
   def play_at(symbol, cell_number)
-    board = self.clone
+    board = Board.new(@cells.clone)
     board[cell_number] = symbol
     board
   end
